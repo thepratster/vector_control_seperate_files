@@ -1,0 +1,16 @@
+// Aa code produced by llvm2aa (version 1.0)
+$module [theta_calc] 
+$in (omega_r : $float<8,23> omega_m : $float<8,23> del_t : $float<8,23> theta_prev : $float<8,23> )
+$out (ret_val__ : $float<8,23>)
+$is 
+{
+  $branchblock [body] 
+  {
+    //begin: basic-block bb_0
+    $call fpmul32f (omega_r omega_m )  (iNsTr_0)
+    $call fpmul32f (iNsTr_0 del_t )  (iNsTr_1)
+    $call fpadd32f (theta_prev iNsTr_0 )  (ret_val__)
+    $place [return__]
+    $merge return__ $endmerge
+  }
+}

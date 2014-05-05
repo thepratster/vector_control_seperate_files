@@ -1,0 +1,168 @@
+// Aa code produced by llvm2aa (version 1.0)
+$pipe in_data1 : $float<8,23> $depth 1
+$pipe in_data2 : $float<8,23> $depth 1
+$pipe in_data3 : $float<8,23> $depth 1
+$pipe in_data4 : $float<8,23> $depth 1
+$pipe out_data1 : $float<8,23> $depth 1
+$pipe out_data2 : $float<8,23> $depth 1
+$pipe out_data3 : $float<8,23> $depth 1
+$pipe out_data4 : $float<8,23> $depth 1
+$module [vector_control_daemon] 
+$in ()
+$out ()
+$is 
+{
+  $branchblock [body] 
+  {
+    //begin: basic-block bb_0
+    $call fpmul32f (( $bitcast ($float<8,23> ) _f3.000000e+03 )  ( $bitcast ($float<8,23> ) _f4.000000e+00 )  )  (iNsTr_0)
+    $call fpmul32f (iNsTr_0 ( $bitcast ($float<8,23> ) _f8.096000e-01 )  )  (iNsTr_1)
+    $place [bb_0_bb_1]
+    //begin: basic-block bb_1
+    $merge bb_0_bb_1 bb_19_bb_1
+    $phi flux_rotor_prevx_x0 :=  ( $cast ($float<8,23>) ( $bitcast ($float<8,23> ) _f0.000000e+00 ) ) $on bb_0_bb_1 ( $cast ($float<8,23>) iNsTr_33) $on bb_19_bb_1 
+    $phi theta_prevx_x0 :=  ( $cast ($float<8,23>) ( $bitcast ($float<8,23> ) _f0.000000e+00 ) ) $on bb_0_bb_1 ( $cast ($float<8,23>) iNsTr_35) $on bb_19_bb_1 
+    $phi int_flux_errx_x0 :=  ( $cast ($float<8,23>) ( $bitcast ($float<8,23> ) _f0.000000e+00 ) ) $on bb_0_bb_1 ( $cast ($float<8,23>) int_flux_errx_x1) $on bb_19_bb_1 
+    $phi int_speed_errx_x0 :=  ( $cast ($float<8,23>) ( $bitcast ($float<8,23> ) _f0.000000e+00 ) ) $on bb_0_bb_1 ( $cast ($float<8,23>) int_speed_errx_x1) $on bb_19_bb_1 
+    $endmerge
+    iNsTr_4 := in_data1
+    iNsTr_6 := in_data2
+    iNsTr_8 := in_data3
+    iNsTr_10 := in_data4
+    $call fpsub32f (iNsTr_10 iNsTr_8 )  (iNsTr_11)
+    $call fpmul32f (( $bitcast ($float<8,23> ) _f5.000000e-05 )  iNsTr_11 )  (iNsTr_12)
+    $call fpadd32f (iNsTr_12 int_speed_errx_x0 )  (iNsTr_13)
+    $call fpmul32f (( $bitcast ($float<8,23> ) _f5.000000e+01 )  iNsTr_13 )  (iNsTr_14)
+    iNsTr_15 := ($cast ($float<11,52>) iNsTr_14)
+    // compare instruction
+    iNsTr_16 := (iNsTr_15 < ( $bitcast ($float<11,52> ) _f-1.500000e+01 )  )
+    $if iNsTr_16 $then  $place [bb_1_bb_4] $else $place [bb_1_bb_2] $endif 
+    //begin: basic-block bb_2
+    $merge bb_1_bb_2
+    $endmerge
+    // compare instruction
+    iNsTr_22 := (iNsTr_15 > ( $bitcast ($float<11,52> ) _f1.500000e+01 )  )
+    $if iNsTr_22 $then  $place [bb_2_bb_4] $else $place [bb_2_bb_3] $endif 
+    //begin: basic-block bb_3
+    $merge bb_2_bb_3
+    $endmerge
+    $place [bb_3_bb_4]
+    //begin: basic-block bb_4
+    $merge bb_1_bb_4 bb_2_bb_4 bb_3_bb_4
+    $phi int_speed_errx_x1 :=  ( $cast ($float<8,23>) iNsTr_14) $on bb_3_bb_4 ( $cast ($float<8,23>) ( $bitcast ($float<8,23> ) _f-1.500000e+01 ) ) $on bb_1_bb_4 ( $cast ($float<8,23>) ( $bitcast ($float<8,23> ) _f1.500000e+01 ) ) $on bb_2_bb_4 
+    $endmerge
+    $call fpmul32f (iNsTr_11 ( $bitcast ($float<8,23> ) _f4.000000e+01 )  )  (iNsTr_18)
+    $call fpadd32f (int_speed_errx_x1 iNsTr_18 )  (iNsTr_19)
+    // compare instruction
+    iNsTr_20 := (iNsTr_19 < ( $bitcast ($float<8,23> ) _f-3.000000e+01 )  )
+    $if iNsTr_20 $then  $place [bb_4_bb_7] $else $place [bb_4_bb_5] $endif 
+    //begin: basic-block bb_5
+    $merge bb_4_bb_5
+    $endmerge
+    // compare instruction
+    iNsTr_27 := (iNsTr_19 > ( $bitcast ($float<8,23> ) _f3.000000e+01 )  )
+    $if iNsTr_27 $then  $place [bb_5_bb_7] $else $place [bb_5_bb_6] $endif 
+    //begin: basic-block bb_6
+    $merge bb_5_bb_6
+    $endmerge
+    $place [bb_6_bb_7]
+    //begin: basic-block bb_7
+    $merge bb_4_bb_7 bb_5_bb_7 bb_6_bb_7
+    $phi torque_refx_x0 :=  ( $cast ($float<8,23>) iNsTr_19) $on bb_6_bb_7 ( $cast ($float<8,23>) ( $bitcast ($float<8,23> ) _f-3.000000e+01 ) ) $on bb_4_bb_7 ( $cast ($float<8,23>) ( $bitcast ($float<8,23> ) _f3.000000e+01 ) ) $on bb_5_bb_7 
+    $endmerge
+    iNsTr_24 := ($cast ($float<11,52>) iNsTr_10)
+    // compare instruction
+    iNsTr_25 := (iNsTr_24 > ( $bitcast ($float<11,52> ) _f2.000000e+03 )  )
+    $if iNsTr_25 $then  $place [bb_7_bb_8] $else $place [bb_7_bb_13] $endif 
+    //begin: basic-block bb_8
+    $merge bb_7_bb_8
+    $endmerge
+    // compare instruction
+    iNsTr_30 := (iNsTr_24 > ( $bitcast ($float<11,52> ) _f2.500000e+03 )  )
+    $if iNsTr_30 $then  $place [bb_8_bb_10] $else $place [bb_8_bb_9] $endif 
+    //begin: basic-block bb_9
+    $merge bb_8_bb_9
+    $endmerge
+    $call fpmul32f (( $bitcast ($float<8,23> ) _f-2.000000e-04 )  iNsTr_10 )  (iNsTr_46)
+    $call fpadd32f (iNsTr_46 ( $bitcast ($float<8,23> ) _f1.400000e+00 )  )  (iNsTr_47)
+    $call fpmul32f (iNsTr_47 ( $bitcast ($float<8,23> ) _f3.000000e+02 )  )  (iNsTr_48)
+    $place [bb_9_bb_13]
+    //begin: basic-block bb_10
+    $merge bb_8_bb_10
+    $endmerge
+    // compare instruction
+    iNsTr_44 := (iNsTr_24 > ( $bitcast ($float<11,52> ) _f3.000000e+03 )  )
+    $if iNsTr_44 $then  $place [bb_10_bb_12] $else $place [bb_10_bb_11] $endif 
+    //begin: basic-block bb_11
+    $merge bb_10_bb_11
+    $endmerge
+    $call fpmul32f (( $bitcast ($float<8,23> ) _f-3.600000e-04 )  iNsTr_10 )  (iNsTr_60)
+    $call fpadd32f (iNsTr_60 ( $bitcast ($float<8,23> ) _f1.800000e+00 )  )  (iNsTr_61)
+    $call fpmul32f (iNsTr_61 ( $bitcast ($float<8,23> ) _f3.000000e+02 )  )  (iNsTr_62)
+    $place [bb_11_bb_13]
+    //begin: basic-block bb_12
+    $merge bb_10_bb_12
+    $endmerge
+    $call fpmul32f (( $bitcast ($float<8,23> ) _f-4.200000e-04 )  iNsTr_10 )  (iNsTr_56)
+    $call fpadd32f (iNsTr_56 ( $bitcast ($float<8,23> ) _f1.980000e+00 )  )  (iNsTr_57)
+    $call fpmul32f (iNsTr_57 ( $bitcast ($float<8,23> ) _f3.000000e+02 )  )  (iNsTr_58)
+    $place [bb_12_bb_13]
+    //begin: basic-block bb_13
+    $merge bb_11_bb_13 bb_12_bb_13 bb_7_bb_13 bb_9_bb_13
+    $phi flux_refx_x0 :=  ( $cast ($float<8,23>) iNsTr_48) $on bb_9_bb_13 ( $cast ($float<8,23>) iNsTr_62) $on bb_11_bb_13 ( $cast ($float<8,23>) iNsTr_58) $on bb_12_bb_13 ( $cast ($float<8,23>) ( $bitcast ($float<8,23> ) _f3.000000e+02 ) ) $on bb_7_bb_13 
+    $endmerge
+    $call fpadd32f (( $bitcast ($float<8,23> ) _f5.000000e-05 )  ( $bitcast ($float<8,23> ) _f1.039198e-01 )  )  (iNsTr_32)
+    $call rotor_flux_calc (( $bitcast ($float<8,23> ) _f5.000000e-05 )  ( $bitcast ($float<8,23> ) _f8.096000e-01 )  iNsTr_4 flux_rotor_prevx_x0 iNsTr_32 ( $bitcast ($float<8,23> ) _f1.039198e-01 )  )  (iNsTr_33)
+    $call omega_calc (( $bitcast ($float<8,23> ) _f8.096000e-01 )  iNsTr_6 ( $bitcast ($float<8,23> ) _f1.039198e-01 )  iNsTr_33 )  (iNsTr_34)
+    $call theta_calc (iNsTr_34 ( $bitcast ($float<8,23> ) _f3.141593e+02 )  ( $bitcast ($float<8,23> ) _f5.000000e-05 )  theta_prevx_x0 )  (iNsTr_35)
+    $call iq_err_calc (( $bitcast ($float<8,23> ) _f8.417500e-01 )  torque_refx_x0 iNsTr_1 iNsTr_33 )  (iNsTr_36)
+    $call fpsub32f (flux_refx_x0 iNsTr_33 )  (iNsTr_37)
+    $call fpmul32f (( $bitcast ($float<8,23> ) _f5.000000e-08 )  iNsTr_37 )  (iNsTr_38)
+    $call fpadd32f (iNsTr_38 int_flux_errx_x0 )  (iNsTr_39)
+    $call fpmul32f (( $bitcast ($float<8,23> ) _f5.000000e+07 )  iNsTr_39 )  (iNsTr_40)
+    // compare instruction
+    iNsTr_41 := (iNsTr_40 < ( $bitcast ($float<8,23> ) _f-1.000000e+06 )  )
+    $if iNsTr_41 $then  $place [bb_13_bb_16] $else $place [bb_13_bb_14] $endif 
+    //begin: basic-block bb_14
+    $merge bb_13_bb_14
+    $endmerge
+    // compare instruction
+    iNsTr_54 := (iNsTr_40 > ( $bitcast ($float<8,23> ) _f1.000000e+06 )  )
+    $if iNsTr_54 $then  $place [bb_14_bb_16] $else $place [bb_14_bb_15] $endif 
+    //begin: basic-block bb_15
+    $merge bb_14_bb_15
+    $endmerge
+    $place [bb_15_bb_16]
+    //begin: basic-block bb_16
+    $merge bb_13_bb_16 bb_14_bb_16 bb_15_bb_16
+    $phi int_flux_errx_x1 :=  ( $cast ($float<8,23>) iNsTr_40) $on bb_15_bb_16 ( $cast ($float<8,23>) ( $bitcast ($float<8,23> ) _f-1.000000e+06 ) ) $on bb_13_bb_16 ( $cast ($float<8,23>) ( $bitcast ($float<8,23> ) _f1.000000e+06 ) ) $on bb_14_bb_16 
+    $endmerge
+    $call fpmul32f (iNsTr_37 ( $bitcast ($float<8,23> ) _f4.000000e+07 )  )  (iNsTr_50)
+    $call fpadd32f (int_flux_errx_x1 iNsTr_50 )  (iNsTr_51)
+    // compare instruction
+    iNsTr_52 := (iNsTr_51 < ( $bitcast ($float<8,23> ) _f-2.000000e+06 )  )
+    $if iNsTr_52 $then  $place [bb_16_bb_19] $else $place [bb_16_bb_17] $endif 
+    //begin: basic-block bb_17
+    $merge bb_16_bb_17
+    $endmerge
+    // compare instruction
+    iNsTr_75 := (iNsTr_51 > ( $bitcast ($float<8,23> ) _f2.000000e+06 )  )
+    $if iNsTr_75 $then  $place [bb_17_bb_19] $else $place [bb_17_bb_18] $endif 
+    //begin: basic-block bb_18
+    $merge bb_17_bb_18
+    $endmerge
+    phitmp := ($cast ($float<11,52>) iNsTr_51)
+    $place [bb_18_bb_19]
+    //begin: basic-block bb_19
+    $merge bb_16_bb_19 bb_17_bb_19 bb_18_bb_19
+    $phi flux_addx_x0 :=  ( $cast ($float<11,52>) phitmp) $on bb_18_bb_19 ( $cast ($float<11,52>) ( $bitcast ($float<11,52> ) _f-2.000000e+06 ) ) $on bb_16_bb_19 ( $cast ($float<11,52>) ( $bitcast ($float<11,52> ) _f2.000000e+06 ) ) $on bb_17_bb_19 
+    $endmerge
+    $call fdiv32 (flux_addx_x0 ( $bitcast ($float<11,52> ) _f8.096000e+05 )  )  (iNsTr_64)
+    iNsTr_65 :=  ( $cast ($float<8,23>)  ( $bitcast ( $int< 32 > ) iNsTr_64) ) 
+    out_data1 := iNsTr_65
+    out_data2 := iNsTr_36
+    out_data3 := iNsTr_34
+    out_data4 := iNsTr_33
+    $place [bb_19_bb_1]
+  }
+}

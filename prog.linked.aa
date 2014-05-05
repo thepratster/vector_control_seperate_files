@@ -1,0 +1,283 @@
+$module [fdiv32]
+$in ( a : $float<11,52>   b : $float<11,52>  )
+$out ( ret_val__ : $float<11,52>  )
+$is
+{
+  $branchblock [body]
+  {
+    tmp17 := ($bitcast ($uint<64>) a )
+    tmp15 := ($bitcast ($uint<64>) b )
+    iNsTr_0 := (tmp17 & ($bitcast ($uint<64>) _b0111111111111111111111111111111111111111111111111111111111111111  ))
+    iNsTr_1 := (tmp15 & ($bitcast ($uint<64>) _b0111111111111111111111111111111111111111111111111111111111111111  ))
+    iNsTr_2 := (iNsTr_0 == ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000000  ))
+    $if iNsTr_2 $then 
+    $place[bb_0_bb_2]
+    $else 
+    $place[bb_0_bb_1]
+    $endif
+    $merge bb_0_bb_1 
+    $endmerge
+    iNsTr_25 := (tmp15 & ($bitcast ($uint<64>) _b0111111111110000000000000000000000000000000000000000000000000000  ))
+    tmp17x_xmask := (tmp17 & ($bitcast ($uint<64>) _b0111111111110000000000000000000000000000000000000000000000000000  ))
+    iNsTr_26 := (tmp17x_xmask + ($bitcast ($uint<64>) _b0011111111100000000000000000000000000000000000000000000000000000  ))
+    phitmp := (iNsTr_26 - iNsTr_25)
+    phitmp20 := (phitmp & ($bitcast ($uint<64>) _b0111111111110000000000000000000000000000000000000000000000000000  ))
+    $place[bb_1_bb_2]
+    $merge bb_0_bb_2 bb_1_bb_2 
+    $phi iNsTr_4 := 			  ($cast ($uint<64>) phitmp20 ) $on bb_1_bb_2			  ($cast ($uint<64>) ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000000  ) ) $on bb_0_bb_2 // type of target is $uint<64>
+    $endmerge
+    iNsTr_5 := (tmp17 & ($bitcast ($uint<64>) _b0000000000001111111111111111111111111111111111111111111111111111  ))
+    iNsTr_6 := (tmp15 | ($bitcast ($uint<64>) _b0011111111100000000000000000000000000000000000000000000000000000  ))
+    iNsTr_7 := (iNsTr_4 | iNsTr_5)
+    iNsTr_8 := (iNsTr_6 & ($bitcast ($uint<64>) _b0011111111101111111111111111111111111111111111111111111111111111  ))
+    tmp13 := ($bitcast ($float<11,52>) iNsTr_7 )
+    tmp11 := ($bitcast ($float<11,52>) iNsTr_8 )
+    iNsTr_9 := (tmp11 * ($bitcast ($float<11,52>) _f1.882353e+00 ))
+    iNsTr_10 := (($bitcast ($float<11,52>) _f2.823529e+00 ) - iNsTr_9)
+    iNsTr_11 := (tmp11 * iNsTr_10)
+    iNsTr_12 := (($bitcast ($float<11,52>) _f2.000000e+00 ) - iNsTr_11)
+    iNsTr_13 := (iNsTr_10 * iNsTr_12)
+    iNsTr_14 := (tmp11 * iNsTr_13)
+    iNsTr_15 := (($bitcast ($float<11,52>) _f2.000000e+00 ) - iNsTr_14)
+    iNsTr_16 := (iNsTr_13 * iNsTr_15)
+    iNsTr_17 := (tmp11 * iNsTr_16)
+    iNsTr_18 := (($bitcast ($float<11,52>) _f2.000000e+00 ) - iNsTr_17)
+    iNsTr_19 := (iNsTr_16 * iNsTr_18)
+    iNsTr_20 := (tmp11 * iNsTr_19)
+    iNsTr_21 := (($bitcast ($float<11,52>) _f2.000000e+00 ) - iNsTr_20)
+    iNsTr_22 := (iNsTr_19 * iNsTr_21)
+    iNsTr_23 := (iNsTr_1 == ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000000  ))
+    orx_xcond := (iNsTr_2 | iNsTr_23)
+    $if orx_xcond $then 
+    $place[bb_2_bb_4]
+    $else 
+    $place[bb_2_bb_3]
+    $endif
+    $merge bb_2_bb_3 
+    $endmerge
+    iNsTr_33 := (tmp13 * iNsTr_22)
+    phitmp19 := ($bitcast ($uint<64>) iNsTr_33 )
+    phitmp21 := (phitmp19 & ($bitcast ($uint<64>) _b0111111111111111111111111111111111111111111111111111111111111111  ))
+    $place[bb_3_bb_4]
+    $merge bb_2_bb_4 bb_3_bb_4 
+    $phi iNsTr_28 := 			  ($cast ($uint<64>) phitmp21 ) $on bb_3_bb_4			  ($cast ($uint<64>) ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000000  ) ) $on bb_2_bb_4 // type of target is $uint<64>
+    $endmerge
+    iNsTr_29 := (tmp15 ^ tmp17)
+    iNsTr_30 := (iNsTr_29 & ($bitcast ($uint<64>) _b1000000000000000000000000000000000000000000000000000000000000000  ))
+    iNsTr_31 := (iNsTr_28 | iNsTr_30)
+    ret_val__ := ($bitcast ($float<11,52>) iNsTr_31 )
+    $place[return__]
+    $merge return__ 
+    $endmerge
+  }
+}
+$module [fpadd32f]
+$in ( x : $float<8,23>   y : $float<8,23>  )
+$out ( ret_val__ : $float<8,23>  )
+$is
+{
+  $branchblock [body]
+  {
+    ret_val__ := (x + y)
+    $place[return__]
+    $merge return__ 
+    $endmerge
+  }
+}
+$module [fpadd32fi]
+$in ( x : $uint<32>   y : $uint<32>  )
+$out ( ret_val__ : $uint<32>  )
+$is
+{
+  $branchblock [body]
+  {
+    ret_val__ := (y + x)
+    $place[return__]
+    $merge return__ 
+    $endmerge
+  }
+}
+$module [fpmul32f]
+$in ( x : $float<8,23>   y : $float<8,23>  )
+$out ( ret_val__ : $float<8,23>  )
+$is
+{
+  $branchblock [body]
+  {
+    ret_val__ := (x * y)
+    $place[return__]
+    $merge return__ 
+    $endmerge
+  }
+}
+$module [fpsub32f]
+$in ( x : $float<8,23>   y : $float<8,23>  )
+$out ( ret_val__ : $float<8,23>  )
+$is
+{
+  $branchblock [body]
+  {
+    ret_val__ := (x - y)
+    $place[return__]
+    $merge return__ 
+    $endmerge
+  }
+}
+$module [fpsub32fi]
+$in ( x : $uint<32>   y : $uint<32>  )
+$out ( ret_val__ : $uint<32>  )
+$is
+{
+  $branchblock [body]
+  {
+    ret_val__ := (x - y)
+    $place[return__]
+    $merge return__ 
+    $endmerge
+  }
+}
+$module [getBit64]
+$in ( reg : $uint<64>   pos : $uint<8>  )
+$out ( ret_val__ : $uint<8>  )
+$is
+{
+  $branchblock [body]
+  {
+    iNsTr_0 := ($cast ($uint<64>) pos )
+    iNsTr_1 := (($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000111111  ) - iNsTr_0)
+    iNsTr_2 := (iNsTr_1 & ($bitcast ($uint<64>) _b0000000000000000000000000000000011111111111111111111111111111111  ))
+    iNsTr_3 := (reg << iNsTr_2)
+    iNsTr_4 := (iNsTr_3 >> ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000111111  ))
+    ret_val__ := ($cast ($uint<8>) iNsTr_4 )
+    $place[return__]
+    $merge return__ 
+    $endmerge
+  }
+}
+$module [getSlice64]
+$in ( reg : $uint<64>   h : $uint<8>   l : $uint<8>  )
+$out ( ret_val__ : $uint<64>  )
+$is
+{
+  $branchblock [body]
+  {
+    iNsTr_0 := ($cast ($uint<64>) h )
+    iNsTr_1 := (($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000111111  ) - iNsTr_0)
+    iNsTr_2 := (iNsTr_1 & ($bitcast ($uint<64>) _b0000000000000000000000000000000011111111111111111111111111111111  ))
+    iNsTr_3 := (reg << iNsTr_2)
+    iNsTr_4 := ($cast ($uint<64>) l )
+    iNsTr_5 := (iNsTr_1 + iNsTr_4)
+    iNsTr_6 := (iNsTr_5 & ($bitcast ($uint<64>) _b0000000000000000000000000000000011111111111111111111111111111111  ))
+    ret_val__ := (iNsTr_3 >> iNsTr_6)
+    $place[return__]
+    $merge return__ 
+    $endmerge
+  }
+}
+$module [global_storage_initializer_]
+$in ()
+$out ()
+$is
+{
+  $null
+}
+$module [iq_err_calc]
+$in ( Lr : $float<8,23>   torque_ref : $float<8,23>   constant_1 : $float<8,23>   flux_rotor : $float<8,23>  )
+$out ( ret_val__ : $float<8,23>  )
+$is
+{
+  $branchblock [body]
+  {
+    iNsTr_0 := (flux_rotor < ($bitcast ($float<8,23>) _f1.000000e+00 ))
+    xx_x0 := ( $mux iNsTr_0 ($bitcast ($float<8,23>) _f1.000000e+00 )  flux_rotor ) 
+    $call fpmul32f (($bitcast ($float<8,23>) _f2.000000e+06 ) Lr ) (iNsTr_1 ) 
+    $call fpmul32f (iNsTr_1 torque_ref ) (iNsTr_2 ) 
+    $call fpmul32f (constant_1 xx_x0 ) (iNsTr_3 ) 
+    iNsTr_4 := ($cast ($float<11,52>) iNsTr_2 )
+    iNsTr_5 := ($cast ($float<11,52>) iNsTr_3 )
+    $call fdiv32 (iNsTr_4 iNsTr_5 ) (iNsTr_6 ) 
+    ret_val__ := ($cast ($float<8,23>) ($bitcast ($int<32>) iNsTr_6 ) )
+    $place[return__]
+    $merge return__ 
+    $endmerge
+  }
+}
+$module [rotor_flux_calc]
+$in ( del_t : $float<8,23>   Lm : $float<8,23>   id : $float<8,23>   flux_rotor_prev : $float<8,23>   tau_new : $float<8,23>   tau_r : $float<8,23>  )
+$out ( ret_val__ : $float<8,23>  )
+$is
+{
+  $branchblock [body]
+  {
+    $call fpmul32f (($bitcast ($float<8,23>) _f5.000000e+04 ) Lm ) (iNsTr_0 ) 
+    $call fpmul32f (id iNsTr_0 ) (iNsTr_1 ) 
+    $call fpmul32f (($bitcast ($float<8,23>) _f1.039198e+05 ) flux_rotor_prev ) (iNsTr_2 ) 
+    $call fpadd32f (iNsTr_2 iNsTr_1 ) (iNsTr_3 ) 
+    iNsTr_4 := ($cast ($float<11,52>) iNsTr_3 )
+    $call fdiv32 (iNsTr_4 ($bitcast ($float<11,52>) _f1.039698e+05 ) ) (iNsTr_5 ) 
+    ret_val__ := ($cast ($float<8,23>) ($bitcast ($int<32>) iNsTr_5 ) )
+    $place[return__]
+    $merge return__ 
+    $endmerge
+  }
+}
+$module [setBit64]
+$in ( reg : $uint<64>   pos : $uint<8>   value : $uint<8>  )
+$out ( ret_val__ : $uint<64>  )
+$is
+{
+  $branchblock [body]
+  {
+    iNsTr_0 := ($cast ($uint<64>) value )
+    iNsTr_1 := ($cast ($uint<64>) pos )
+    iNsTr_2 := (iNsTr_0 & ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    iNsTr_3 := (iNsTr_2 << iNsTr_1)
+    iNsTr_4 := (($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ) << iNsTr_1)
+    iNsTr_5 := (iNsTr_4 ^ ($bitcast ($uint<64>) _b1111111111111111111111111111111111111111111111111111111111111111  ))
+    iNsTr_6 := (iNsTr_5 & reg)
+    ret_val__ := (iNsTr_6 | iNsTr_3)
+    $place[return__]
+    $merge return__ 
+    $endmerge
+  }
+}
+$module [setSlice64]
+$in ( reg : $uint<64>   h : $uint<8>   l : $uint<8>   value : $uint<64>  )
+$out ( ret_val__ : $uint<64>  )
+$is
+{
+  $branchblock [body]
+  {
+    iNsTr_0 := ($cast ($uint<64>) h )
+    iNsTr_1 := ($cast ($uint<64>) l )
+    iNsTr_2 := (($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000111111  ) - iNsTr_0)
+    iNsTr_3 := (iNsTr_2 + iNsTr_1)
+    iNsTr_4 := (iNsTr_3 & ($bitcast ($uint<64>) _b0000000000000000000000000000000011111111111111111111111111111111  ))
+    iNsTr_5 := (($bitcast ($uint<64>) _b1111111111111111111111111111111111111111111111111111111111111111  ) >> iNsTr_4)
+    iNsTr_6 := (iNsTr_5 & value)
+    iNsTr_7 := (iNsTr_6 << iNsTr_1)
+    iNsTr_8 := (iNsTr_5 << iNsTr_1)
+    iNsTr_9 := (iNsTr_8 ^ ($bitcast ($uint<64>) _b1111111111111111111111111111111111111111111111111111111111111111  ))
+    iNsTr_10 := (iNsTr_9 & reg)
+    ret_val__ := (iNsTr_10 | iNsTr_7)
+    $place[return__]
+    $merge return__ 
+    $endmerge
+  }
+}
+$module [theta_calc]
+$in ( omega_r : $float<8,23>   omega_m : $float<8,23>   del_t : $float<8,23>   theta_prev : $float<8,23>  )
+$out ( ret_val__ : $float<8,23>  )
+$is
+{
+  $branchblock [body]
+  {
+    $call fpmul32f (omega_r omega_m ) (iNsTr_0 ) 
+    $call fpmul32f (iNsTr_0 del_t ) (iNsTr_1 ) 
+    $call fpadd32f (theta_prev iNsTr_0 ) (ret_val__ ) 
+    $place[return__]
+    $merge return__ 
+    $endmerge
+  }
+}
+// Memory space 0: 

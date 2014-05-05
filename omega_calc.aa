@@ -1,0 +1,19 @@
+// Aa code produced by llvm2aa (version 1.0)
+$module [omega_calc] 
+$in (Lm : $float<8,23> iq : $float<8,23> tau_r : $float<8,23> flux_rotor : $float<8,23> )
+$out (ret_val__ : $float<8,23>)
+$is 
+{
+  $branchblock [body] 
+  {
+    //begin: basic-block bb_0
+    $call fpmul32f (Lm iq )  (iNsTr_0)
+    $call fpmul32f (tau_r flux_rotor )  (iNsTr_1)
+    iNsTr_2 := ($cast ($float<11,52>) iNsTr_0)
+    iNsTr_3 := ($cast ($float<11,52>) iNsTr_1)
+    $call fdiv32 (iNsTr_2 iNsTr_3 )  (iNsTr_4)
+    ret_val__ :=  ( $cast ($float<8,23>)  ( $bitcast ( $int< 32 > ) iNsTr_4) ) 
+    $place [return__]
+    $merge return__ $endmerge
+  }
+}

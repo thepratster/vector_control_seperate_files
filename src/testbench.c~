@@ -1,0 +1,270 @@
+#include <pthread.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <pthreadUtils.h>
+#include <Pipes.h>
+#include <pipeHandler.h>
+#ifndef SW
+#include "vhdlCStubs.h"
+#endif
+
+void vector_control_daemon();
+
+void im_zep(double *iq, double *iq_prev, double *id, double *id_prev, double *flq, double *flq_prev, double *fld, double *fld_prev, double *spd_prev, double vd,double vq,double *torque,double load_torque,double *time, double *spd)   
+{
+
+	double	alpha = 0,
+		beta = 0,
+		sigma = 0,
+		mu = 0,
+		gamma = 0,
+		omega = 314.15,
+		inertia = 0.013,
+		rs = 4.9,
+		rr = 8.1,
+		lls = 0.03215,
+		llr = 0.03215,
+		ls = 0,
+		lr = 0,
+		lm = 0.8096,
+		poles = 4,
+		cont = 0,
+		time_period = 2.5e-6;
+                                                   
+	double k1 = 0,k2 = 0,k3 = 0,k4 = 0;
+	double l1 = 0,l2 = 0,l3 = 0,l4 = 0;
+	double m1 = 0,m2 = 0,m3 = 0,m4 = 0;
+	double n1 = 0,n2 = 0,n3 = 0,n4 = 0;
+	double o1 = 0,o2 = 0,o3 = 0,o4 = 0;
+	double delta = 0;
+	
+	ls = lm + lls;
+	lr = lm + llr;
+	alpha = rr/lr;
+	sigma = ls - lm*lm/lr;
+	beta = lm/(sigma*lr);
+	mu = (3/2)*(poles/2)*(lm/(inertia*lr));
+	gamma = lm*lm*rr/(sigma*lr*lr)+rs/sigma;
+	cont = (3*poles*lm/(4*lr));
+	
+        if ( 0.0 == *time ) {           
+                  
+		*iq_prev = 0.0;
+		*id_prev = 0.0;
+		*flq_prev = 0.0;
+		*fld_prev = 0.0;
+		*spd_prev = 0.0;
+		*iq = 0.0;
+		*id = 0.0;
+		*flq = 0.0;
+		*fld = 0.0;
+		*spd = 0.0;
+		*torque = 0.0;
+		*iq_prev = *iq;
+		*id_prev = *id;
+		*flq_prev = *flq;
+		*fld_prev = *fld;
+		*spd_prev = *spd;
+		delta = time_period;
+		*time = *time + delta;
+  
+        }
+        else {       
+	
+		delta = time_period;
+
+		k1 = -gamma*(*iq_prev) - omega*(*id_prev) + alpha*beta*(*flq_prev) - beta*(*spd_prev)*(*fld_prev) + (vq)/sigma;
+		l1 = omega*(*iq_prev) - gamma*(*id_prev) + beta*(*spd_prev)*(*flq_prev) + alpha*beta*(*fld_prev) + (vd)/sigma;
+		m1 = alpha*lm*(*iq_prev) - alpha*(*flq_prev) - (omega-(*spd_prev))*(*fld_prev);
+		n1 = alpha*lm*(*id_prev) + (omega-(*spd_prev))*(*flq_prev) - alpha*(*fld_prev);
+		o1 = ((cont*((*fld_prev)*(*iq_prev) - (*flq_prev)*(*id_prev)))-load_torque)/inertia;
+
+		k2 = -gamma*((*iq_prev) + delta/2*k1) - omega*((*id_prev)+delta/2*l1) + alpha*beta*((*flq_prev)+delta/2*m1) - beta*((*spd_prev)+delta/2*o1)*((*fld_prev)+delta/2*n1) + (vq)/sigma;
+		l2 = omega*((*iq_prev) + delta/2*k1) - gamma*((*id_prev) + delta/2*l1) + beta*((*spd_prev) + delta/2*o1)*((*flq_prev) + delta/2*m1) + alpha*beta*((*fld_prev) + delta/2*n1) + (vd)/sigma;
+		m2 = alpha*lm*((*iq_prev) + delta/2*k1) - alpha*((*flq_prev) + delta/2*m1) - (omega-((*spd_prev) + delta/2*o1))*((*fld_prev) + delta/2*n1);
+		n2 = alpha*lm*((*id_prev) + delta/2*l1) + (omega-((*spd_prev) + delta/2*o1))*((*flq_prev) + delta/2*m1) - alpha*((*fld_prev) + delta/2*n1);
+		o2 = ((cont*(((*fld_prev) + delta/2*n1)*((*iq_prev) + delta/2*k1) - ((*flq_prev) + delta/2*m1)*((*id_prev) + delta/2*l1)))-load_torque)/inertia;
+
+		k3 = -gamma*((*iq_prev) + delta/2*k2) - omega*((*id_prev)+delta/2*l2) + alpha*beta*((*flq_prev)+delta/2*m2) - beta*((*spd_prev)+delta/2*o2)*((*fld_prev)+delta/2*n2) + (vq)/sigma;
+		l3 = omega*((*iq_prev) + delta/2*k2) - gamma*((*id_prev) + delta/2*l2) + beta*((*spd_prev) + delta/2*o2)*((*flq_prev) + delta/2*m2) + alpha*beta*((*fld_prev) + delta/2*n2) + (vd)/sigma;
+		m3 = alpha*lm*((*iq_prev) + delta/2*k2) - alpha*((*flq_prev) + delta/2*m2) - (omega-((*spd_prev) + delta/2*o2))*((*fld_prev) + delta/2*n2);
+		n3 = alpha*lm*((*id_prev) + delta/2*l2) + (omega-((*spd_prev) + delta/2*o2))*((*flq_prev) + delta/2*m2) - alpha*((*fld_prev) + delta/2*n2);
+		o3 = ((cont*(((*fld_prev) + delta/2*n2)*((*iq_prev) + delta/2*k2) - ((*flq_prev) + delta/2*m2)*((*id_prev) + delta/2*l2)))-load_torque)/inertia;
+
+		k4 = -gamma*((*iq_prev) + delta*k3) - omega*((*id_prev)+delta*l3) + alpha*beta*((*flq_prev)+delta*m3) - beta*((*spd_prev)+delta*o3)*((*fld_prev)+delta*n3) + (vq)/sigma;
+		l4 = omega*((*iq_prev) + delta*k3) - gamma*((*id_prev) + delta*l3) + beta*((*spd_prev) + delta*o3)*((*flq_prev) + delta*m3) + alpha*beta*((*fld_prev) + delta*n3) + (vd)/sigma;
+		m4 = alpha*lm*((*iq_prev) + delta*k3) - alpha*((*flq_prev) + delta*m3) - (omega-((*spd_prev) + delta*o3))*((*fld_prev) + delta*n3);
+		n4 = alpha*lm*((*id_prev) + delta*l3) + (omega-((*spd_prev) + delta*o3))*((*flq_prev) + delta*m3) - alpha*((*fld_prev) + delta*n3);
+		o4 = ((cont*(((*fld_prev) + delta*n3)*((*iq_prev) + delta*k3) - ((*flq_prev) + delta*m3)*((*id_prev) + delta*l3)))-load_torque)/inertia;
+
+		*iq = (*iq_prev) + delta*(k1 + 2*k2 + 2*k3 + k4)/6;
+		*id = (*id_prev) + delta*(l1 + 2*l2 + 2*l3 + l4)/6;
+		*flq = (*flq_prev) + delta*(m1 + 2*m2 + 2*m3 + m4)/6;
+		*fld = (*fld_prev) + delta*(n1 + 2*n2 + 2*n3 + n4)/6;
+		*spd = (*spd_prev) + delta*(o1 + 2*o2 + 2*o3 + o4)/6;
+		*torque = cont*((*iq)*(*fld) - (*id)*(*flq));
+
+		*time = *time + delta;
+		*iq_prev = *iq;
+		*id_prev = *id;
+		*flq_prev = *flq;
+		*fld_prev = *fld;
+		*spd_prev = *spd;
+	}
+}
+
+
+#ifdef SW
+DEFINE_THREAD(vector_control_daemon)
+#endif
+
+int main(int argc, char* argv[]){
+
+	#ifdef SW
+	init_pipe_handler();
+	PTHREAD_DECL(vector_control_daemon);
+	PTHREAD_CREATE(vector_control_daemon);
+	#endif
+	
+	char buffer[BUFSIZ];
+	char filename_id[] = "/home/pratik/Files/MTP/ahir-master/MTP_Project/Vector_Control_double_work/test1.txt";
+	double id_err = 0,iq_err = 0, theta = 0, speed = 0,temp_1 = 0,temp_2 = 0,temp_3 = 0,temp_4 = 0,temp_5 = 0,temp_6 = 0,temp_7 = 0,temp_8 = 0;
+	double voltage_iteration = 150;
+	double tol_error = 0.1;
+	double t_ref = 0,f_ref = 0;
+	double	iq = 0, 
+	iq_prev = 0,
+	id =0,
+	id_prev = 0,
+	flq = 0,
+	flq_prev = 0,
+	fld = 0,
+	fld_prev = 0,
+	spd=0,
+	spd_prev = 0,
+	vd = 0,
+	vq = 0,
+	torque = 0,
+	load_torque = 0,
+	time = 0;
+	float iq_float,id_float,spd_float,spd_ref_float;
+	float id_err_float,iq_err_float,t_ref_float,f_ref_float;
+	double spd_ref = 1400;
+	int i=0,count = 0;;
+	int no_of_cycles = 20 ; // 50u/500n (Ideal time necessary for conputation for FPGA/Motor_iteration_step)
+	uint32_t temp_var = 0,temp_var1 = 0;
+	uint32_t a=0,b=0,c=0,d=0,e=0,f=0;
+
+	
+	FILE *fp_id = NULL;
+	fp_id = fopen(filename_id, "w"); 
+	if(fp_id == NULL) {
+		printf("Failed to open file for writing\n");
+	}
+	fputs("Id_ref Values Generated\n", fp_id); 
+	fclose(fp_id);
+	
+//	fprintf(stdout,"Before while\n");
+	while(time < 5){
+		count++;
+//		fprintf(stdout,"Before motor\n");
+		for(i = 0; i< no_of_cycles; i++){
+			im_zep(&iq,&iq_prev,&id,&id_prev,&flq,&flq_prev,&fld,&fld_prev,&spd_prev,vd,vq,&torque,load_torque,&time,&spd);
+		}	
+		id_float = id;
+		iq_float = iq;
+		spd_float = (spd*60)/6.28;
+		spd_ref_float = spd_ref;
+//		fprintf(stdout,"After motor\n");
+		write_float32("in_data1",id_float);
+		write_float32("in_data2",iq_float);
+		write_float32("in_data3",spd_float);
+		write_float32("in_data4",spd_ref_float);
+//		fprintf(stdout,"Data written\n");
+/*		a = read_uint64("out_data5");
+		fprintf(stdout,"Data written a\n");
+		b = read_uint64("out_data6");
+		fprintf(stdout,"Data written b \n");
+		c = read_uint64("out_data7");
+		fprintf(stdout,"Data written c\n");
+		d = read_uint64("out_data8");
+		fprintf(stdout,"Data written d\n");
+*/
+
+		id_err_float = read_float32("out_data1");
+		iq_err_float = read_float32("out_data2");
+		t_ref_float = read_float32("out_data3");
+		f_ref_float = read_float32("out_data4");
+		
+		id_err = id_err_float;
+		iq_err = iq_err_float;
+		t_ref = t_ref_float;
+		f_ref = f_ref_float;
+		
+		
+//		fprintf(stdout,"Data read\n");
+		if ((id_err - id) > (tol_error) )
+			vd = vd + voltage_iteration;
+		else if ((id_err - id) < (-tol_error) ) 
+			vd = vd - voltage_iteration;
+		else vd = 0;
+			
+		
+		if ((iq_err - iq) > tol_error )
+			vq = vq + 75;
+		else if ((iq_err - iq) < (-tol_error) ) 
+			vq = vq - 75;
+		else vq = 0;
+		
+		if (vq > 150)
+			vq = 150;
+		else if (vq < -150)
+			vq = -150;
+		else
+			vq = vq;
+			
+		if (vd > 150)
+			vd = 150;
+		else if (vd < -150)
+			vd = -150;
+		else
+			vd = vd;
+				
+		if (time>2){
+			load_torque = 5;
+		}
+		
+		if (time>4){
+			spd_ref = 1610;
+		}
+		
+		fp_id = fopen(filename_id, "a"); // open file for appending !!! 
+		if(fp_id == NULL)
+		{
+			printf("Failed to open file for appending\n");
+		}
+		fprintf(fp_id,"-------------------\n");
+		fprintf(fp_id,"id = %20.18f id_err=%20.18f iq = %20.18f iq_err=%20.18f speed=%20.18f torque=%20.18f id_prev=%20.18f time = %20.33f vd = %20.18f vq = %20.18f \n t_ref = %20.18f \n f_ref = %20.18f \n", id,id_err,iq,iq_err,((spd*60)/6.28),spd_ref,id_prev, time,vd,vq, t_ref, f_ref); // write a formatted string to file 
+		fprintf(fp_id,"-------------------\n");
+		fclose(fp_id);
+		fprintf(stdout," ------------------------- \n 1 = %20.45f \n 2 = %20.18f \n ", id_err,iq_err); 
+//		fprintf(stdout," ------------------------- \n 1 = %20.45f \n 2 = %20.18f \n 3= %20.18f \n 4= %20.18f \n 5= %20.18f \n 6= %20.18f \n 7= %20.18f \n 8= %20.18f \n 9= %20.18f \n 10= %20.18f \n", id_err,iq_err,temp_1,temp_2,temp_3,temp_4,temp_5,temp_6,temp_7,temp_8); 
+		
+
+	}
+	fp_id = fopen(filename_id, "a"); // open file for appending !!! 
+	if(fp_id == NULL)
+	{
+		printf("Failed to open file for appending\n");
+	}
+	fprintf(fp_id,"End\n");
+	fclose(fp_id);
+	#ifdef SW
+	close_pipe_handler();
+	PTHREAD_CANCEL(vector_control_daemon);
+#endif
+    return 0;
+}
+

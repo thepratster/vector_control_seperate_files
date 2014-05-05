@@ -1,0 +1,14 @@
+// Aa code produced by llvm2aa (version 1.0)
+$module [fpadd32fi] 
+$in (x : $uint<32> y : $uint<32> )
+$out (ret_val__ : $uint<32>)
+$is 
+{
+  $branchblock [body] 
+  {
+    //begin: basic-block bb_0
+    ret_val__ := (y + x)
+    $place [return__]
+    $merge return__ $endmerge
+  }
+}

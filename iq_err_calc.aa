@@ -1,0 +1,23 @@
+// Aa code produced by llvm2aa (version 1.0)
+$module [iq_err_calc] 
+$in (Lr : $float<8,23> torque_ref : $float<8,23> constant_1 : $float<8,23> flux_rotor : $float<8,23> )
+$out (ret_val__ : $float<8,23>)
+$is 
+{
+  $branchblock [body] 
+  {
+    //begin: basic-block bb_0
+    // compare instruction
+    iNsTr_0 := (flux_rotor < ( $bitcast ($float<8,23> ) _f1.000000e+00 )  )
+    xx_x0 := ( $mux iNsTr_0 ( $bitcast ($float<8,23> ) _f1.000000e+00 )  flux_rotor)
+    $call fpmul32f (( $bitcast ($float<8,23> ) _f2.000000e+06 )  Lr )  (iNsTr_1)
+    $call fpmul32f (iNsTr_1 torque_ref )  (iNsTr_2)
+    $call fpmul32f (constant_1 xx_x0 )  (iNsTr_3)
+    iNsTr_4 := ($cast ($float<11,52>) iNsTr_2)
+    iNsTr_5 := ($cast ($float<11,52>) iNsTr_3)
+    $call fdiv32 (iNsTr_4 iNsTr_5 )  (iNsTr_6)
+    ret_val__ :=  ( $cast ($float<8,23>)  ( $bitcast ( $int< 32 > ) iNsTr_6) ) 
+    $place [return__]
+    $merge return__ $endmerge
+  }
+}

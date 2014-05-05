@@ -1,0 +1,154 @@
+// Aa code produced by llvm2aa (version 1.0)
+$module [getSlice64] 
+$in (reg : $uint<64> h : $uint<8> l : $uint<8> )
+$out (ret_val__ : $uint<64>)
+$is 
+{
+  $branchblock [body] 
+  {
+    //begin: basic-block bb_0
+    iNsTr_0 := ($cast ($uint<64>) h)
+    iNsTr_1 := (( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000111111 )  - iNsTr_0)
+    iNsTr_2 := (iNsTr_1 & ( $bitcast ($uint<64> ) _b0000000000000000000000000000000011111111111111111111111111111111 ) )
+    iNsTr_3 := (reg << iNsTr_2)
+    iNsTr_4 := ($cast ($uint<64>) l)
+    iNsTr_5 := (iNsTr_1 + iNsTr_4)
+    iNsTr_6 := (iNsTr_5 & ( $bitcast ($uint<64> ) _b0000000000000000000000000000000011111111111111111111111111111111 ) )
+    ret_val__ := (iNsTr_3 >> iNsTr_6)
+    $place [return__]
+    $merge return__ $endmerge
+  }
+}
+$module [getBit64] 
+$in (reg : $uint<64> pos : $uint<8> )
+$out (ret_val__ : $uint<8>)
+$is 
+{
+  $branchblock [body] 
+  {
+    //begin: basic-block bb_0
+    iNsTr_0 := ($cast ($uint<64>) pos)
+    iNsTr_1 := (( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000111111 )  - iNsTr_0)
+    iNsTr_2 := (iNsTr_1 & ( $bitcast ($uint<64> ) _b0000000000000000000000000000000011111111111111111111111111111111 ) )
+    iNsTr_3 := (reg << iNsTr_2)
+    iNsTr_4 := (iNsTr_3 >> ( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000111111 ) )
+    ret_val__ := ($cast ($uint<8>) iNsTr_4)
+    $place [return__]
+    $merge return__ $endmerge
+  }
+}
+$module [setSlice64] 
+$in (reg : $uint<64> h : $uint<8> l : $uint<8> value : $uint<64> )
+$out (ret_val__ : $uint<64>)
+$is 
+{
+  $branchblock [body] 
+  {
+    //begin: basic-block bb_0
+    iNsTr_0 := ($cast ($uint<64>) h)
+    iNsTr_1 := ($cast ($uint<64>) l)
+    iNsTr_2 := (( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000111111 )  - iNsTr_0)
+    iNsTr_3 := (iNsTr_2 + iNsTr_1)
+    iNsTr_4 := (iNsTr_3 & ( $bitcast ($uint<64> ) _b0000000000000000000000000000000011111111111111111111111111111111 ) )
+    iNsTr_5 := (( $bitcast ($uint<64> ) _b1111111111111111111111111111111111111111111111111111111111111111 )  >> iNsTr_4)
+    iNsTr_6 := (iNsTr_5 & value)
+    iNsTr_7 := (iNsTr_6 << iNsTr_1)
+    iNsTr_8 := (iNsTr_5 << iNsTr_1)
+    iNsTr_9 := (iNsTr_8 ^ ( $bitcast ($uint<64> ) _b1111111111111111111111111111111111111111111111111111111111111111 ) )
+    iNsTr_10 := (iNsTr_9 & reg)
+    ret_val__ := (iNsTr_10 | iNsTr_7)
+    $place [return__]
+    $merge return__ $endmerge
+  }
+}
+$module [setBit64] 
+$in (reg : $uint<64> pos : $uint<8> value : $uint<8> )
+$out (ret_val__ : $uint<64>)
+$is 
+{
+  $branchblock [body] 
+  {
+    //begin: basic-block bb_0
+    iNsTr_0 := ($cast ($uint<64>) value)
+    iNsTr_1 := ($cast ($uint<64>) pos)
+    iNsTr_2 := (iNsTr_0 & ( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000001 ) )
+    iNsTr_3 := (iNsTr_2 << iNsTr_1)
+    iNsTr_4 := (( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000001 )  << iNsTr_1)
+    iNsTr_5 := (iNsTr_4 ^ ( $bitcast ($uint<64> ) _b1111111111111111111111111111111111111111111111111111111111111111 ) )
+    iNsTr_6 := (iNsTr_5 & reg)
+    ret_val__ := (iNsTr_6 | iNsTr_3)
+    $place [return__]
+    $merge return__ $endmerge
+  }
+}
+$module [fdiv32] 
+$in (a : $float<11,52> b : $float<11,52> )
+$out (ret_val__ : $float<11,52>)
+$is 
+{
+  $branchblock [body] 
+  {
+    //begin: basic-block bb_0
+    tmp17 := ($bitcast ($uint<64>) a)
+    tmp15 := ($bitcast ($uint<64>) b)
+    iNsTr_0 := (tmp17 & ( $bitcast ($uint<64> ) _b0111111111111111111111111111111111111111111111111111111111111111 ) )
+    iNsTr_1 := (tmp15 & ( $bitcast ($uint<64> ) _b0111111111111111111111111111111111111111111111111111111111111111 ) )
+    // compare instruction
+    iNsTr_2 := (iNsTr_0 == ( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000000 )  )
+    $if iNsTr_2 $then  $place [bb_0_bb_2] $else $place [bb_0_bb_1] $endif 
+    //begin: basic-block bb_1
+    $merge bb_0_bb_1
+    $endmerge
+    iNsTr_25 := (tmp15 & ( $bitcast ($uint<64> ) _b0111111111110000000000000000000000000000000000000000000000000000 ) )
+    tmp17x_xmask := (tmp17 & ( $bitcast ($uint<64> ) _b0111111111110000000000000000000000000000000000000000000000000000 ) )
+    iNsTr_26 := (tmp17x_xmask + ( $bitcast ($uint<64> ) _b0011111111100000000000000000000000000000000000000000000000000000 ) )
+    phitmp := (iNsTr_26 - iNsTr_25)
+    phitmp20 := (phitmp & ( $bitcast ($uint<64> ) _b0111111111110000000000000000000000000000000000000000000000000000 ) )
+    $place [bb_1_bb_2]
+    //begin: basic-block bb_2
+    $merge bb_0_bb_2 bb_1_bb_2
+    $phi iNsTr_4 :=  ( $cast ($uint<64>) phitmp20) $on bb_1_bb_2 ( $cast ($uint<64>) ( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000000 ) ) $on bb_0_bb_2 
+    $endmerge
+    iNsTr_5 := (tmp17 & ( $bitcast ($uint<64> ) _b0000000000001111111111111111111111111111111111111111111111111111 ) )
+    iNsTr_6 := (tmp15 | ( $bitcast ($uint<64> ) _b0011111111100000000000000000000000000000000000000000000000000000 ) )
+    iNsTr_7 := (iNsTr_4 | iNsTr_5)
+    iNsTr_8 := (iNsTr_6 & ( $bitcast ($uint<64> ) _b0011111111101111111111111111111111111111111111111111111111111111 ) )
+    tmp13 := ($bitcast ($float<11,52>) iNsTr_7)
+    tmp11 := ($bitcast ($float<11,52>) iNsTr_8)
+    iNsTr_9 := (tmp11 * ( $bitcast ($float<11,52> ) _f1.882353e+00 ) )
+    iNsTr_10 := (( $bitcast ($float<11,52> ) _f2.823529e+00 )  - iNsTr_9)
+    iNsTr_11 := (tmp11 * iNsTr_10)
+    iNsTr_12 := (( $bitcast ($float<11,52> ) _f2.000000e+00 )  - iNsTr_11)
+    iNsTr_13 := (iNsTr_10 * iNsTr_12)
+    iNsTr_14 := (tmp11 * iNsTr_13)
+    iNsTr_15 := (( $bitcast ($float<11,52> ) _f2.000000e+00 )  - iNsTr_14)
+    iNsTr_16 := (iNsTr_13 * iNsTr_15)
+    iNsTr_17 := (tmp11 * iNsTr_16)
+    iNsTr_18 := (( $bitcast ($float<11,52> ) _f2.000000e+00 )  - iNsTr_17)
+    iNsTr_19 := (iNsTr_16 * iNsTr_18)
+    iNsTr_20 := (tmp11 * iNsTr_19)
+    iNsTr_21 := (( $bitcast ($float<11,52> ) _f2.000000e+00 )  - iNsTr_20)
+    iNsTr_22 := (iNsTr_19 * iNsTr_21)
+    // compare instruction
+    iNsTr_23 := (iNsTr_1 == ( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000000 )  )
+    orx_xcond := (iNsTr_2 | iNsTr_23)
+    $if orx_xcond $then  $place [bb_2_bb_4] $else $place [bb_2_bb_3] $endif 
+    //begin: basic-block bb_3
+    $merge bb_2_bb_3
+    $endmerge
+    iNsTr_33 := (tmp13 * iNsTr_22)
+    phitmp19 := ($bitcast ($uint<64>) iNsTr_33)
+    phitmp21 := (phitmp19 & ( $bitcast ($uint<64> ) _b0111111111111111111111111111111111111111111111111111111111111111 ) )
+    $place [bb_3_bb_4]
+    //begin: basic-block bb_4
+    $merge bb_2_bb_4 bb_3_bb_4
+    $phi iNsTr_28 :=  ( $cast ($uint<64>) phitmp21) $on bb_3_bb_4 ( $cast ($uint<64>) ( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000000 ) ) $on bb_2_bb_4 
+    $endmerge
+    iNsTr_29 := (tmp15 ^ tmp17)
+    iNsTr_30 := (iNsTr_29 & ( $bitcast ($uint<64> ) _b1000000000000000000000000000000000000000000000000000000000000000 ) )
+    iNsTr_31 := (iNsTr_28 | iNsTr_30)
+    ret_val__ := ($bitcast ($float<11,52>) iNsTr_31)
+    $place [return__]
+    $merge return__ $endmerge
+  }
+}

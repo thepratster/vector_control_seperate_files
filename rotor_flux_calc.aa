@@ -1,0 +1,20 @@
+// Aa code produced by llvm2aa (version 1.0)
+$module [rotor_flux_calc] 
+$in (del_t : $float<8,23> Lm : $float<8,23> id : $float<8,23> flux_rotor_prev : $float<8,23> tau_new : $float<8,23> tau_r : $float<8,23> )
+$out (ret_val__ : $float<8,23>)
+$is 
+{
+  $branchblock [body] 
+  {
+    //begin: basic-block bb_0
+    $call fpmul32f (( $bitcast ($float<8,23> ) _f5.000000e+04 )  Lm )  (iNsTr_0)
+    $call fpmul32f (id iNsTr_0 )  (iNsTr_1)
+    $call fpmul32f (( $bitcast ($float<8,23> ) _f1.039198e+05 )  flux_rotor_prev )  (iNsTr_2)
+    $call fpadd32f (iNsTr_2 iNsTr_1 )  (iNsTr_3)
+    iNsTr_4 := ($cast ($float<11,52>) iNsTr_3)
+    $call fdiv32 (iNsTr_4 ( $bitcast ($float<11,52> ) _f1.039698e+05 )  )  (iNsTr_5)
+    ret_val__ :=  ( $cast ($float<8,23>)  ( $bitcast ( $int< 32 > ) iNsTr_5) ) 
+    $place [return__]
+    $merge return__ $endmerge
+  }
+}
